@@ -7,10 +7,7 @@
             <class name="com.chenhongzhi.maven.HttpRequestTest"></class>
         </classes>
     </test>
-    <test name="demoTest">
-        <classes>
-            <class name="com.chenhongzhi.maven.HttpRequest"/>
-            <class name="com.chenhongzhi.maven.HttpRequestTest"/>
-        </classes>
-    </test>
+    <listeners>
+        <listener class-name="com.chenhongzhi.util.CListener"></listener>
+    </listeners>
 </suite>

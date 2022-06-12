@@ -22,12 +22,13 @@ import org.testng.Assert;
 import java.io.IOException;
 import java.security.Key;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class HttpRequest {
     /**
      * 一些全局变量
      */
-    static HttpClient httpClient = new DefaultHttpClient();
 //    static CloseableHttpClient httpClient = SSLUtils.createSSLClientDefault();
     /**
      * 发送get请求
@@ -35,6 +36,7 @@ public class HttpRequest {
      * @return httpresponse
      */
     public static JSONObject sentGet(String url, HashMap<String, String> header) throws IOException {
+        HttpClient httpClient = new DefaultHttpClient();
         //创建请求实例
         HttpGet httpGet = new HttpGet(url);
 //        System.out.println("sendGet:"+url);
@@ -44,14 +46,12 @@ public class HttpRequest {
 //        httpGet.setHeader("Accept", "application/json, text/javascript, */*; q=0.01");
 //        httpGet.setHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36");
         //b.用map里的key，value
-        if (!header.isEmpty()){
-            for (String key : header.keySet()){
-                httpGet.setHeader(key, header.get(key));
-                System.out.println("key="+key+";value="+header.get(key));
-            }
-        }else {
-            throw new IOException();
+        Iterator<Map.Entry<String, String>> it = header.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry<String,String> entry = it.next();
+            httpGet.setHeader(entry.getKey(),entry.getValue());
         }
+
         CloseableHttpResponse closeableHttpResponse = null;
         try {
             //发送get请求
