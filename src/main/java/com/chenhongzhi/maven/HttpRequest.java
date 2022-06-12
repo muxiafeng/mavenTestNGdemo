@@ -11,6 +11,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.testng.Assert;
@@ -22,7 +23,7 @@ public class HttpRequest {
      * 一些全局变量
      */
     static HttpClient httpClient = new DefaultHttpClient();
-
+//    static CloseableHttpClient httpClient = SSLUtils.createSSLClientDefault();
     /**
      * 发送get请求
      * @param url
@@ -35,22 +36,23 @@ public class HttpRequest {
         JSONObject content = null;
         //加入参
         httpGet.setHeader("cookie", "PHPSESSID=5m8ltehht21qcb789u6808sgp7; Hm_lvt_ca368c21c1d2aa60e6f63d598c4cb02a=1649486265,1649603913; Hm_lpvt_ca368c21c1d2aa60e6f63d598c4cb02a=1649603918");
-        httpGet.setHeader("Accept","application/json, text/javascript, */*; q=0.01");
+        httpGet.setHeader("Accept", "application/json, text/javascript, */*; q=0.01");
         httpGet.setHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36");
-        //发送get请求
-        CloseableHttpResponse closeableHttpResponse = (CloseableHttpResponse) httpClient.execute(httpGet);
+        CloseableHttpResponse closeableHttpResponse = null;
         try {
+            //发送get请求
+            closeableHttpResponse = (CloseableHttpResponse) httpClient.execute(httpGet);
+
             //entity类获取
             HttpEntity httpEntity = closeableHttpResponse.getEntity();
 //            System.out.println("打印返回内容：====================================");
             String contenttype = String.valueOf(httpEntity.getContentType());
 //            System.out.println("contenttype:"+contenttype);
             content = (JSONObject) JSONArray.parse(EntityUtils.toString(httpEntity));
-            System.out.println("content:"+content);
-        }catch (Exception e){
+            System.out.println("content:" + content);
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             //关闭流
             closeableHttpResponse.close();
         }

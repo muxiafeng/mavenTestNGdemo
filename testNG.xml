@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="HttpRequestTest">
-    <test name="HttpRequestTest">
-        <parameter name="url" value="https://www.iamwawa.cn/home/lizhi/ajax" />
-        <parameter name="age" value="18" />
-
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Default Suite">
+    <parameter name="url" value="123123"></parameter>
+    <test name="mavenTestNGdemo">
         <classes>
-            <class name="com.chenhongzhi.maven.HttpRequestTest" />
+            <class name="com.chenhongzhi.maven.HttpRequestTest"></class>
+        </classes>
+    </test>
+    <test name="demoTest">
+        <classes>
+            <class name="com.chenhongzhi.maven.HttpRequest"/>
+            <class name="com.chenhongzhi.maven.HttpRequestTest"/>
         </classes>
     </test>
 </suite>
