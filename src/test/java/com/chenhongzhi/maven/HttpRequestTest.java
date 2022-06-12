@@ -1,24 +1,30 @@
 package com.chenhongzhi.maven;
 
 import com.alibaba.fastjson.JSONObject;
-import org.junit.Test;
-import org.testng.Assert;
+import com.alibaba.fastjson.JSONPath;
 import org.testng.annotations.*;
 
-import java.io.IOException;
+import java.util.HashMap;
 
 public class HttpRequestTest {
 
+//    @BeforeMethod
+//    public String setUp() {
+////        System.out.println("@BeforeMethod");
+//       //使用before传参,声明该方法的返回值类型并返回相应数据
+//        return "string123";
+//    }
     @BeforeMethod
-    public String setUp() {
-//        System.out.println("@BeforeMethod");
-       //使用before传参,声明该方法的返回值类型并返回相应数据
-        return "string123";
+    public HashMap setUp() {
+        //使用before传参,声明该方法的返回值类型并返回相应数据
+        HashMap map = new HashMap();
+        map.put("Cookie","123123");
+        map.put("AAA","456456");
+        return map;
     }
 
     @AfterMethod
     public void tearDown() {
-        System.out.println("@AfterMethod");
     }
 
     //1.使用testNG.xml传参，并右键xml文件run
@@ -53,14 +59,20 @@ public class HttpRequestTest {
 //        throw new Exception();
 //    }
     //3.使用before传递参数，setUp方法返回数据并在test中引用
-    @Test
+//    @Listeners()
+    @Test(timeOut = 3500)
     public void testSentGet() throws Exception {
-        JSONObject json = HttpRequest.sentGet("https://www.iamwawa.cn/home/lizhi/ajax");
-        System.out.println(setUp());
-        String expectInfo = "查询成功！";
-        System.out.println("expectInfo:"+expectInfo);
-        String actualInfo = (String) json.get("info");
-        System.out.println("actualInfo:"+actualInfo);
-        Assert.assertEquals(expectInfo,actualInfo);
+        JSONObject json = HttpRequest.sentGet("https://api.bilibili.com/x/space/acc/info?mid=29660881&jsonp=jsonp",setUp());
+        //获取json指定节点值，用jsonPath解析
+        System.out.println(json.get("data.name"));
+        System.out.println(JSONPath.read(String.valueOf(json),"$.data.name"));
+        assert JSONPath.read(String.valueOf(json),"$.data.name").equals("陈七十一");
+
     }
+    @org.testng.annotations.Test(enabled = false)
+    public void testSet(){
+
+    }
+
+
 }
